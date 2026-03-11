@@ -42,7 +42,34 @@ def create_puzzle_random():
 # print(create_puzzle_random())
 print_board(create_puzzle_random())
 
+def is_box_valid (board, box_row, box_col):
+    # check if the 3x3 box at the given row and column is valid (no duplicates)
+    pass
+
+def is_row_valid (board, row):  
+
+    # check if the given row is valid (no duplicates)
+    pass
+
+def is_col_valid (board, col):
+    # check if the given column is valid (no duplicates)
+    pass    
+
 def is_puzzle_valid (board):
     # run through the rules of the game and check if the board is valid
     # check for duplicates in rows, columns, and 3x3 boxes
-    pass
+
+    # check rows
+    for row in range(9):
+        if not is_row_valid(board, row):
+            return False
+    # check columns
+    for col in range(9):
+        if not is_col_valid(board, col):
+            return False
+    # check boxes
+    for box_row in range(3):
+        for box_col in range(3):
+            if not is_box_valid(board, box_row, box_col):
+                return False
+    return True
