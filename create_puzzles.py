@@ -14,9 +14,35 @@ def print_board(board): # prints the board in a readable format, with spaces bet
 
 # print_board(EMPTY_BOARD)
 
+import random
+def create_row_random():
+    # create a row with random values from the valid cell values, ensuring that there are no duplicates
+    # for use in random puzzle generation
+    row = EMPTY_ROW.copy()
+    remaining_values = VALID_CELL_VALUES.copy()
+    for i in range(9):
+        cell_value = random.choice(remaining_values)
+        row[i] = cell_value
+        remaining_values.remove(cell_value)
+
+
+    return row
 def create_puzzle_random():
     # through row creation, fill up a board
     # then check the board for rule compliance, and if it is not compliant, start over
     # this is a brute-force method, and it may not be the most efficient way to
 
-    board = EMPTY_BOARD
+    board = EMPTY_BOARD.copy()
+    for row in range(9):
+        board[row] = create_row_random()
+
+    return board
+
+
+# print(create_puzzle_random())
+print_board(create_puzzle_random())
+
+def is_puzzle_valid (board):
+    # run through the rules of the game and check if the board is valid
+    # check for duplicates in rows, columns, and 3x3 boxes
+    pass
