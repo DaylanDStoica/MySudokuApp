@@ -40,20 +40,54 @@ def create_puzzle_random():
 
 
 # print(create_puzzle_random())
-print_board(create_puzzle_random())
+#print_board(create_puzzle_random())
 
-def is_box_valid (board, box_row, box_col):
-    # check if the 3x3 box at the given row and column is valid (no duplicates)
-    pass
 
 def is_row_valid (board, row):  
-
     # check if the given row is valid (no duplicates)
-    pass
+    temp_row = row.copy()
+    invalid_values = []
+    for cell in temp_row:
+        if cell in invalid_values: # duplicates
+            return False
+        elif cell != EMPTY_CELL:
+            invalid_values.append(cell)
+    return True
 
 def is_col_valid (board, col):
     # check if the given column is valid (no duplicates)
-    pass    
+    temp_col = [board[row][col] for row in range(9)]
+    invalid_values = []
+    for cell in temp_col:
+        if cell in invalid_values: # duplicates
+            return False
+        elif cell != EMPTY_CELL:
+            invalid_values.append(cell)
+    return True
+
+def is_box_valid (board, box_row, box_col):
+    # check if the 3x3 box at the given row and column is valid (no duplicates)
+        # box_row and box_col are the indices of the box, not the cell
+
+    # create a temporary array to hold the values of the box, for checking for duplicates
+    temp_box = [9][9]
+    temp_row = 0
+    for row in range(box_row * 3, box_row * 3 + 3):
+        temp_col = 0
+        for col in range(box_col * 3, box_col * 3 + 3):
+            # temp_box.append(board[row][col])
+            temp_box[temp_row][temp_col] = board[row][col]
+            temp_col += 1
+        temp_row += 1
+    
+    invalid_values = []
+    for row in temp_box:
+        for cell in row:
+            if cell in invalid_values: # duplicates
+                return False
+            elif cell != EMPTY_CELL:
+                invalid_values.append(cell)
+    return True
 
 def is_puzzle_valid (board):
     # run through the rules of the game and check if the board is valid
@@ -73,3 +107,18 @@ def is_puzzle_valid (board):
             if not is_box_valid(board, box_row, box_col):
                 return False
     return True
+
+
+# testing the validity_checking functions, by getting an outside puzzle for checking
+test_puzzle = [ list('391286574'),
+               list('487359126'),
+               list('652714839'),
+               list('875431692'),
+               list('213967485'),
+               list('964528713'),
+               list('149673258'),
+               list('538142967'),
+               list('726895341')]
+
+print_board(test_puzzle)
+print(is_puzzle_valid(test_puzzle)) # should return True, as this is a valid puzzle
