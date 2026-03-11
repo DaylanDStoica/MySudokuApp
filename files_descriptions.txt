@@ -1,0 +1,12 @@
+main_functions.js 
+	the main page, where the python creations work with the html to produce a page
+homepage.html
+	starting page, used to navigate and select the parameters to your next puzzle
+display_puzzle_page.html
+	display the puzzle created in the python page
+display_puzzle.py
+	move the created puzzle data, and convert it into usable by html or javascript display
+create_puzzles.py
+	functions to create and return a puzzle, with a few given paramters
+handling_puzzle.py
+	handling the input provided by the user on the display_puzzle_page
