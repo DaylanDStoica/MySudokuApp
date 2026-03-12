@@ -45,7 +45,7 @@ def create_puzzle_random():
 
 def is_row_valid (board, row):  
     # check if the given row is valid (no duplicates)
-    temp_row = row.copy()
+    temp_row = board[row]
     invalid_values = []
     for cell in temp_row:
         if cell in invalid_values: # duplicates
@@ -70,7 +70,9 @@ def is_box_valid (board, box_row, box_col):
         # box_row and box_col are the indices of the box, not the cell
 
     # create a temporary array to hold the values of the box, for checking for duplicates
-    temp_box = [9][9]
+    temp_box = [ [EMPTY_CELL] * 3 for _ in range(3) ] # 3x3 array of empty cells
+    # print("printing temp_box:")
+    # print_board(temp_box)
     temp_row = 0
     for row in range(box_row * 3, box_row * 3 + 3):
         temp_col = 0
@@ -110,7 +112,7 @@ def is_puzzle_valid (board):
 
 
 # testing the validity_checking functions, by getting an outside puzzle for checking
-test_puzzle = [ list('391286574'),
+test_puzzle1 = [ list('391286574'),
                list('487359126'),
                list('652714839'),
                list('875431692'),
@@ -120,5 +122,6 @@ test_puzzle = [ list('391286574'),
                list('538142967'),
                list('726895341')]
 
+test_puzzle = test_puzzle1.copy()
 print_board(test_puzzle)
 print(is_puzzle_valid(test_puzzle)) # should return True, as this is a valid puzzle
