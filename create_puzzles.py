@@ -156,4 +156,9 @@ def testing_time_of_random_gen_puzzle():
     # f.close()
 
 
-testing_time_of_random_gen_puzzle()
+# testing_time_of_random_gen_puzzle() # testing stopped after 5 minutes, as it was taking too long to generate a valid puzzle.
+
+# generated notes:
+# this is a brute-force method, and it may take a long time to generate a valid puzzle, especially if the random generation is not efficient.  
+# It may be more efficient to use a backtracking algorithm to generate puzzles, which can ensure that the generated puzzle is valid from the start, 
+# rather than generating random puzzles and checking for validity afterwards.
