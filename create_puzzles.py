@@ -14,6 +14,7 @@ def print_board(board): # prints the board in a readable format, with spaces bet
 
 # print_board(EMPTY_BOARD)
 
+from math import ceil
 import random
 def create_row_random():
     # create a row with random values from the valid cell values, ensuring that there are no duplicates
@@ -122,6 +123,37 @@ test_puzzle1 = [ list('391286574'),
                list('538142967'),
                list('726895341')]
 
-test_puzzle = test_puzzle1.copy()
-print_board(test_puzzle)
-print(is_puzzle_valid(test_puzzle)) # should return True, as this is a valid puzzle
+# test_puzzle = test_puzzle1.copy()
+# print_board(test_puzzle)
+# print(is_puzzle_valid(test_puzzle)) # should return True, as this is a valid puzzle
+
+# test the puzzle generation 
+def testing_time_of_random_gen_puzzle():
+    # test the time it takes to generate a random puzzle, and check if it is valid
+    import time
+    start_time = time.time()
+    current_time = ceil(time.time() - start_time) # round to the upper second, to avoid printing too many decimals
+
+    puzzle_is_valid = False
+    while ( not puzzle_is_valid):
+        # print("Current time: ", time.time() - start_time)
+        # printing time during generation 
+        new_time = ceil(time.time() - start_time)
+        if new_time > current_time: # only print the time if it has changed by at least 1 second, to avoid printing too many times
+            current_time = new_time
+            print("Current time: (seconds)", current_time)
+
+        puzzle = create_puzzle_random()
+        puzzle_is_valid = is_puzzle_valid(puzzle)
+    end_time = time.time()
+    print_board(puzzle)
+    print("Time taken to generate puzzle: ", end_time - start_time)
+    print("Is the puzzle valid? ", is_puzzle_valid(puzzle))
+
+    # with open('test_results.txt', 'a') as f:
+    #     f.write("Time taken to generate valid puzzle (randomly): " + str(end_time - start_time) + "\n")
+    #     f.write("\n")
+    # f.close()
+
+
+testing_time_of_random_gen_puzzle()
