@@ -178,6 +178,7 @@ def testing_time_of_random_gen_puzzle():
     start_time = time.time()
     current_time = ceil(time.time() - start_time) # round to the upper second, to avoid printing too many decimals
 
+    # TODO: implement threading for printing the time during generation, to avoid printing too many times, and to avoid blocking the main thread during generation, which can take a long time, especially if the random generation is not efficient.
     puzzle_is_valid = False
     while ( not puzzle_is_valid):
         # print("Current time: ", time.time() - start_time)
