@@ -180,6 +180,10 @@ def testing_time_of_random_gen_puzzle():
 
     # TODO: implement threading for printing the time during generation, to avoid printing too many times, and to avoid blocking the main thread during generation, which can take a long time, especially if the random generation is not efficient.
     puzzle_is_valid = False
+
+    import threading
+    
+
     while ( not puzzle_is_valid):
         # print("Current time: ", time.time() - start_time)
         # printing time during generation 
@@ -189,8 +193,11 @@ def testing_time_of_random_gen_puzzle():
             print("Current time: (seconds)", current_time)
 
         # puzzle = create_puzzle_random() # this is the original random generation method, which is very inefficient, as it generates completely random boards that are likely to be invalid, and then checks for validity afterwards, which can take a long time to generate a valid puzzle.
+        
         puzzle = create_puzzle_random2() # this is a more efficient random generation method, which fills in the board row by row, and checks for validity after each row is filled in, which should be more likely to generate a valid puzzle in a shorter amount of time, but it is still a brute-force method, and it may still take a long time to generate a valid puzzle, especially if the random generation is not efficient.
         puzzle_is_valid = is_puzzle_valid(puzzle)
+        
+        
     end_time = time.time()
     print_board(puzzle)
     print("Time taken to generate puzzle: ", end_time - start_time)
