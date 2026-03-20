@@ -51,6 +51,22 @@ def create_puzzle_random():
 # rather than generating random puzzles and checking for validity afterwards.
 
 
+
+def track_time_threading():
+    # track the time during puzzle generation, and print it every second, using threading to avoid blocking the main thread during generation, which can take a long time, especially if the random generation is not efficient.
+    import time
+    # import threading
+
+    start_time = time.time()
+    current_time = ceil(time.time() - start_time) # round to the upper second, to avoid printing too many decimals
+
+    while True:
+        new_time = ceil(time.time() - start_time)
+        if new_time > current_time: # only print the time if it has changed by at least 1 second, to avoid printing too many times
+            current_time = new_time
+            print("Current time: (seconds)", current_time)
+        time.sleep(0.1) # sleep for a short amount of time to avoid busy-waiting
+
 # Method 2: random generation, but with a more efficient method than the previous one, by filling in the board row by row, and checking for validity after each row is filled in, which should be more likely to generate a valid puzzle in a shorter amount of time, but it is still a brute-force method, and it may still take a long time to generate a valid puzzle, especially if the random generation is not efficient.
 def create_puzzle_random2():
     # create a random puzzle, but with a more efficient method than the previous one, by filling in the board row by row, and checking for validity after each row is filled in
@@ -181,24 +197,47 @@ def testing_time_of_random_gen_puzzle():
     # TODO: implement threading for printing the time during generation, to avoid printing too many times, and to avoid blocking the main thread during generation, which can take a long time, especially if the random generation is not efficient.
     puzzle_is_valid = False
 
-    import threading
-    
+    def create_and_test_puzzle():
+        nonlocal puzzle_is_valid
+        puzzle = EMPTY_BOARD.copy()
+        while ( not puzzle_is_valid):
+            # puzzle = create_puzzle_random() # this is the original random generation method, which is very inefficient, as it generates completely random boards that are likely to be invalid, and then checks for validity afterwards, which can take a long time to generate a valid puzzle.
+            
+            puzzle = create_puzzle_random2() # this is a more efficient random generation method, which fills in the board row by row, and checks for validity after each row is filled in, which should be more likely to generate a valid puzzle in a shorter amount of time, but it is still a brute-force method, and it may still take a long time to generate a valid puzzle, especially if the random generation is not efficient.
+            puzzle_is_valid = is_puzzle_valid(puzzle)
 
+        return puzzle
+
+    # import threading
+    
+    # time_thread = threading.Thread(target=track_time_threading)
+    # time_thread.start()
+
+    # puzzle_thread = threading.Thread(target=create_and_test_puzzle)
+    # puzzle_thread.start()
+        
     while ( not puzzle_is_valid):
         # print("Current time: ", time.time() - start_time)
-        # printing time during generation 
+        # printing time during generation
+        #  
+        
+        # puzzle = create_puzzle_random() # this is the original random generation method, which is very inefficient, as it generates completely random boards that are likely to be invalid, and then checks for validity afterwards, which can take a long time to generate a valid puzzle.
+        
+        puzzle = create_puzzle_random2() # this is a more efficient random generation method, which fills in the board row by row, and checks for validity after each row is filled in, which should be more likely to generate a valid puzzle in a shorter amount of time, but it is still a brute-force method, and it may still take a long time to generate a valid puzzle, especially if the random generation is not efficient.
+
         new_time = ceil(time.time() - start_time)
         if new_time > current_time: # only print the time if it has changed by at least 1 second, to avoid printing too many times
             current_time = new_time
             print("Current time: (seconds)", current_time)
 
-        # puzzle = create_puzzle_random() # this is the original random generation method, which is very inefficient, as it generates completely random boards that are likely to be invalid, and then checks for validity afterwards, which can take a long time to generate a valid puzzle.
-        
-        puzzle = create_puzzle_random2() # this is a more efficient random generation method, which fills in the board row by row, and checks for validity after each row is filled in, which should be more likely to generate a valid puzzle in a shorter amount of time, but it is still a brute-force method, and it may still take a long time to generate a valid puzzle, especially if the random generation is not efficient.
         puzzle_is_valid = is_puzzle_valid(puzzle)
         
-        
-    end_time = time.time()
+    # time_thread.close() # close the time tracking thread, which should stop it from printing the time during generation, as the puzzle is now generated and is valid
+    # time_thread.join() # wait for the time tracking thread to finish, which should happen when the puzzle is generated and is valid
+    
+    # puzzle_thread.join() # wait for the puzzle generation thread to finish, which should happen when the puzzle is generated and is valid
+    # end_time = time.time() # get the end time after the puzzle is generated and is valid
+    # puzzle = puzzle_thread._target() # get the generated puzzle from the puzzle generation thread, which should be valid
     print_board(puzzle)
     print("Time taken to generate puzzle: ", end_time - start_time)
     print("Is the puzzle valid? ", is_puzzle_valid(puzzle))
@@ -220,3 +259,10 @@ def testing_time_of_random_gen_puzzle():
 # rather than generating random puzzles and checking for validity afterwards.
 
 testing_time_of_random_gen_puzzle()
+
+
+def create_puzzle_random3():
+    # this is a more efficient random generation method, which fills in the board row by row, and checks for validity after each row is filled in, which should be more likely to generate a valid puzzle in a shorter amount of time, but it is still a brute-force method, and it may still take a long time to generate a valid puzzle, especially if the random generation is not efficient.
+    # this method is similar to the previous one, but it also checks for validity after each row is filled in, and if the row is not valid, it will try to fill in the row again, rather than starting over from the first row, which should be more efficient than the previous method, as it will not have to start over from the first row every time a row is not valid.
+
+    board = EMPTY_BOARD.copy()
