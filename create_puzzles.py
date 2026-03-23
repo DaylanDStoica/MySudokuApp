@@ -281,11 +281,18 @@ def testing_time_of_random_gen_puzzle():
     print("Time taken to generate puzzle: ", end_time - start_time)
     print("Is the puzzle valid? ", is_puzzle_valid(puzzle))
 
-    # with open('test_results.txt', 'a') as f:
-    #     f.write("Testing time of create_random_puzzle() function, random puzzle generation method 3 (row by row, with validity checking after each row): \n" )
-    #     f.write("Time taken to generate valid puzzle (randomly): " + str(end_time - start_time) + "\n")
-    #     f.write("\n")
-    # f.close()
+    def puzzle_to_string(puzzle):
+        # convert the puzzle to a string format, for writing to a file, with spaces between the cells and newlines between the rows
+        puzzle_string = ""
+        for row in puzzle:
+            puzzle_string += ' '.join(row) + "\n"
+        return puzzle_string
+    with open('test_results.txt', 'a') as f:
+        f.write("Testing time of create_random_puzzle3() function, random puzzle generation method 3 (row by row, with validity checking after each row): \n" )
+        f.write("Time taken to generate valid puzzle (randomly): " + str(end_time - start_time) + "\n")
+        f.write(puzzle_to_string(puzzle) + "\n") # write the generated puzzle to the file, in a readable format
+        f.write("\n")
+        f.close()
 
 # testing_time_of_random_gen_puzzle()
 
