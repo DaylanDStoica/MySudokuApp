@@ -106,9 +106,9 @@ def create_puzzle_random2():
 
 def is_row_valid (board, row):  
     # check if the given row is valid (no duplicates)
-    print("checking row ", row)
-    print( type(row))
-    print(board[row])
+    # print("checking row ", row)
+    # print( type(row))
+    # print(board[row])
     temp_row = board[row]
     invalid_values = []
     for cell in temp_row:
@@ -197,17 +197,20 @@ def create_puzzle_random3():
 
     board = EMPTY_BOARD.copy()
 
-    print_board(board)
+    # print_board(board)
     import time
     start_time = time.time()
 
     current_time = start_time
-    for row in range(0, 9):
+    row = 0
+    # for row in range(0, 9):
+    while row < 9:
         row_is_valid = False
         while not row_is_valid:
             board[row] = create_row_random()
             row_is_valid = is_row_valid(board, row)
 
+            # print the time change
             new_time = ceil(time.time() - start_time)
             if new_time > current_time: # only print the time if it has changed by at least 1 second, to avoid printing too many times
                 current_time = new_time
@@ -220,6 +223,8 @@ def create_puzzle_random3():
             # reset the current row to empty, to start over from the current row, rather than starting over from the first row, 
             # which should be more efficient than the previous method, as it will not have to start over from the first row every time a row is not valid
             row -= 1 # decrement the row index to start over from the current row, rather than starting over from the first row,
+        row += 1
+    return board
 
 # test the puzzle generation 
 def testing_time_of_random_gen_puzzle():
@@ -277,6 +282,7 @@ def testing_time_of_random_gen_puzzle():
     print("Is the puzzle valid? ", is_puzzle_valid(puzzle))
 
     # with open('test_results.txt', 'a') as f:
+    #     f.write("Testing time of create_random_puzzle() function, random puzzle generation method 3 (row by row, with validity checking after each row): \n" )
     #     f.write("Time taken to generate valid puzzle (randomly): " + str(end_time - start_time) + "\n")
     #     f.write("\n")
     # f.close()
