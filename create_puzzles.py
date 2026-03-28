@@ -370,6 +370,7 @@ def write_playable_puzzle_to_file(puzzle, difficulty):
             f.write(' '.join(row) + "\n")
         f.write("\n")
         f.close()
+
 def test_create_playable_puzzle_with_difficulty():
     # test the create_playable_puzzle_with_difficulty function by creating puzzles with different difficulty levels, and printing them to the console, to visually inspect the puzzles and ensure that they have the expected number of cells cleared, and that they are valid puzzles that can be solved, to verify that the function is working as intended, and to identify any potential issues with the puzzle generation or cell clearing methods.
 
@@ -389,5 +390,11 @@ def test_create_playable_puzzle_with_difficulty():
         print("Is the puzzle valid? ", is_puzzle_valid(puzzle))
         print("\n")
 
+def test_write_to_file():
+    # test the write_playable_puzzle_to_file function by creating a playable puzzle with a certain difficulty level, and writing it to a file, to verify that the function is working as intended, and to ensure that the puzzle is written to the file in a readable format, with the difficulty level included for reference.
 
-test_create_playable_puzzle_with_difficulty()
+    difficulty = random.randint(1, 10)
+    puzzle = create_playable_puzzle_with_difficulty(difficulty)
+    write_playable_puzzle_to_file(puzzle, difficulty)
+
+test_write_to_file()
