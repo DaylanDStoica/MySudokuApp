@@ -270,6 +270,10 @@ def testing_time_of_random_gen_puzzle():
             print("Current time: (seconds)", current_time)
 
         puzzle_is_valid = is_puzzle_valid(puzzle)
+
+        # if after so much time, the puzzle is still not valid, print a message to indicate that it is taking a long time to generate a valid puzzle, and to consider optimizing the random generation method, or implementing a more efficient method, such as backtracking, to ensure that the generated puzzle is valid from the start, rather than generating random puzzles and checking for validity afterwards.
+        if new_time > 30: # if it has been more than 30 seconds, print a message to indicate that it is taking a long time to generate a valid puzzle, and to consider optimizing the random generation method, or implementing a more efficient method, such as backtracking, to ensure that the generated puzzle is valid from the start, rather than generating random puzzles and checking for validity afterwards.
+            print("It is taking a long time to generate a valid puzzle, consider optimizing the random generation method, or implementing a more efficient method, such as backtracking, to ensure that the generated puzzle is valid from the start, rather than generating random puzzles and checking for validity afterwards.")
         
     # time_thread.close() # close the time tracking thread, which should stop it from printing the time during generation, as the puzzle is now generated and is valid
     # time_thread.join() # wait for the time tracking thread to finish, which should happen when the puzzle is generated and is valid
@@ -306,7 +310,7 @@ def testing_time_of_random_gen_puzzle():
 # It may be more efficient to use a backtracking algorithm to generate puzzles, which can ensure that the generated puzzle is valid from the start, 
 # rather than generating random puzzles and checking for validity afterwards.
 
-testing_time_of_random_gen_puzzle()
+# testing_time_of_random_gen_puzzle()
 
 # TODO: implement a more efficient puzzle generation method, reducing the max time it takes to generate a valid puzzle
 # currently recorded max: Time taken to generate valid puzzle (randomly): 46.96166396141052
@@ -320,3 +324,70 @@ testing_time_of_random_gen_puzzle()
 # OPTION 2: optimize the random generation method, by filling in the board row by row
 
 
+def clear_puzzle_cells( puzzle, num_cells_to_clear):
+    # clear a certain number of cells from the given puzzle, to create a playable puzzle, by replacing the cell values with empty cells, and ensuring that the cleared cells are not all in the same row, column, or box, to maintain the difficulty of the puzzle
+    # this is a brute-force method, and it may take a long time to clear the cells in a way that maintains the difficulty of the puzzle, especially if the random generation is not efficient.
+    # it may be more efficient to use a more systematic method for clearing the cells, such as clearing cells in a specific pattern, or using a backtracking algorithm to ensure that the cleared cells maintain the difficulty of the puzzle.
+
+    cleared_cells = 0
+    while cleared_cells < num_cells_to_clear:
+        row = random.randint(0, 8)
+        col = random.randint(0, 8)
+        if puzzle[row][col] != EMPTY_CELL: # only clear the cell if it is not already empty
+            puzzle[row][col] = EMPTY_CELL
+            cleared_cells += 1
+
+
+def create_playable_puzzle(num_cells_to_clear):
+    # create a playable puzzle by first generating a filled puzzle, and then clearing a certain number of cells from it, to create a playable puzzle, by replacing the cell values with empty cells, and ensuring that the cleared cells are not all in the same row, column, or box, to maintain the difficulty of the puzzle
+    # this is a brute-force method, and it may take a long time to clear the cells in a way that maintains the difficulty of the puzzle, especially if the random generation is not efficient.
+    # it may be more efficient to use a more systematic method for clearing the cells, such as clearing cells in a specific pattern, or using a backtracking algorithm to ensure that the cleared cells maintain the difficulty of the puzzle.
+
+    filled_puzzle = create_puzzle_random3() # create a filled puzzle using the more efficient random generation method
+    while not is_puzzle_valid(filled_puzzle):
+        filled_puzzle = create_puzzle_random3() # if the generated puzzle is not valid, try generating another one, until a valid puzzle is generated, to ensure that the filled puzzle is valid before clearing cells from it to create a playable puzzle
+    clear_puzzle_cells(filled_puzzle, num_cells_to_clear) # clear a certain number of cells from the filled puzzle to create a playable puzzle
+    return filled_puzzle
+
+
+def create_playable_puzzle_with_difficulty( difficulty):
+    # difficulty will be used as an integer from 1 to 10, with 1 being the easiest and 10 being the hardest, and will determine the number of cells to clear from the filled puzzle, to create a playable puzzle, by replacing the cell values with empty cells, and ensuring that the cleared cells are not all in the same row, column, or box, to maintain the difficulty of the puzzle
+
+    # using the difficulty integer to create a range of number of cells to clear, with the minimum number of cells to clear being 20 for difficulty 1, and the maximum number of cells to clear being 60 for difficulty 10, with a linear increase in the number of cells to clear as the difficulty increases, to create a playable puzzle with a difficulty level that corresponds to the given difficulty integer
+    min_cells_to_clear = 20
+    max_cells_to_clear = 60
+    num_cells_to_clear = min_cells_to_clear + (difficulty - 1) * (max_cells_to_clear - min_cells_to_clear) // 9 # linear increase in the number of cells to clear as the difficulty increases, with a maximum of 60 cells to clear for difficulty 10
+    
+    # writing to a file, write down the created puzzle and its difficulty level 
+    return create_playable_puzzle(num_cells_to_clear)
+
+def write_playable_puzzle_to_file(puzzle, difficulty):
+    # write the given playable puzzle to a file, with the difficulty level, for reference and testing purposes
+    with open("playable_puzzles.txt", "w") as f:
+        f.write("Difficulty level: " + str(difficulty) + "\n")
+        f.write("Playable puzzle: \n")
+        for row in puzzle:
+            f.write(' '.join(row) + "\n")
+        f.write("\n")
+        f.close()
+def test_create_playable_puzzle_with_difficulty():
+    # test the create_playable_puzzle_with_difficulty function by creating puzzles with different difficulty levels, and printing them to the console, to visually inspect the puzzles and ensure that they have the expected number of cells cleared, and that they are valid puzzles that can be solved, to verify that the function is working as intended, and to identify any potential issues with the puzzle generation or cell clearing methods.
+
+    import time
+
+    start_time = time.time()
+    current_time = ceil(time.time() - start_time)
+    # for difficulty in range(1, 11):
+    random_difficulty = random.randint(1, 10)
+    if ( random_difficulty):
+        difficulty = random_difficulty
+        current_time = ceil(time.time() - start_time)
+        print("Current time: (seconds)", current_time  )
+        print("Difficulty level: ", difficulty)
+        puzzle = create_playable_puzzle_with_difficulty(difficulty)
+        print_board(puzzle)
+        print("Is the puzzle valid? ", is_puzzle_valid(puzzle))
+        print("\n")
+
+
+test_create_playable_puzzle_with_difficulty()
