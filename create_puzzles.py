@@ -297,8 +297,9 @@ def testing_time_of_random_gen_puzzle():
 # testing_time_of_random_gen_puzzle()
 
 # testing_time_of_random_gen_puzzle() # testing stopped after 5 minutes, as it was taking too long to generate a valid puzzle.
-# TODO: implement a more efficient puzzle generation method, such as backtracking, to ensure that the generated puzzle is valid from the start, 
+# Completed TODO: implement a more efficient puzzle generation method, such as backtracking, to ensure that the generated puzzle is valid from the start, 
 # rather than generating random puzzles and checking for validity afterwards.
+
 
 # generated notes:
 # this is a brute-force method, and it may take a long time to generate a valid puzzle, especially if the random generation is not efficient.  
@@ -306,4 +307,16 @@ def testing_time_of_random_gen_puzzle():
 # rather than generating random puzzles and checking for validity afterwards.
 
 testing_time_of_random_gen_puzzle()
+
+# TODO: implement a more efficient puzzle generation method, reducing the max time it takes to generate a valid puzzle
+# currently recorded max: Time taken to generate valid puzzle (randomly): 46.96166396141052
+# over 45 seconds.
+# find out why it took so long, and optimize the random generation method, or implement a more efficient method, such as backtracking, to ensure that the generated puzzle is valid from the start,
+
+# consider some possible reasons for the long generation time, and how to optimize it:
+# OPTION 1: an anomaly, try running the test again to see if it is a consistent issue, 
+# or if it was just an anomaly that took a long time to generate a valid puzzle, as random generation can sometimes take a long time to generate a valid puzzle,
+# perhaps an error in the testing environment or an unaccounted factor
+# OPTION 2: optimize the random generation method, by filling in the board row by row
+
 
