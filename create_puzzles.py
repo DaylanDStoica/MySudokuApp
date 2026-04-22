@@ -397,4 +397,4 @@ def test_write_to_file():
     puzzle = create_playable_puzzle_with_difficulty(difficulty)
     write_playable_puzzle_to_file(puzzle, difficulty)
 
-test_write_to_file()
+# test_write_to_file()
