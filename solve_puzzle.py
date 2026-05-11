@@ -41,10 +41,11 @@ def read_puzzle_from_file( filename = "playable_puzzles.txt"):
     # puzzle = puzzle.split('\n')
     print("puzzle \n", puzzle)
     f.close()
+    return puzzle
 
-print("read from file function")
-for i in range(3): 
-    read_puzzle_from_file()
+# print("read from file function")
+# for i in range(3): 
+#     read_puzzle_from_file()
 
 # BUG: each running of the read from file function, seems to be putting in new puzzles into the txt file
 # this would explain the lag in time, as each calling is accidentally generating a new puzzle
@@ -61,8 +62,9 @@ def findTheNextEmptyCell ( unsolved_puzzle):
                 return x, y 
     return -1, -1 # no more empty cells
 
-def solvePuzzleV1( unsolved_puzzle):
-    puzzle_copy = unsolved_puzzle.copy()
+def solvePuzzleV1( unsolved_puzzle): # version 1
+    # puzzle_copy = unsolved_puzzle.copy()
+    puzzle_copy = unsolved_puzzle.split('\n') # split the puzzle into rows, so that it is a 2D array
     # first version of the process, will use brute force to solve
     # 1. enter an empty cell, going from left-to-right and top-to-bottom
     # 2. select the first/next value in acceptable values_list for the cell
@@ -74,7 +76,7 @@ def solvePuzzleV1( unsolved_puzzle):
     # this may require mulitple retraces to find a cell with another valid number with change
     # 5. repeat until reach the end of puzzle and puzzle is valid with all cells filled.
 
-    while ( True):
+    while ( True): # solving the puzzle 
         # Step 1: find the empty cell 
         empty_cell_coords = findTheNextEmptyCell(puzzle_copy)
         # if the empty cell coords put it outside the puzzle, check that the puzzle is valid, 
@@ -91,9 +93,50 @@ def solvePuzzleV1( unsolved_puzzle):
         for new_num in ACCEPTABLE_CELL_VALUES:
             # check if the puzzle is still valid after new number
             temp_puzzle[empty_cell_coords[0] ] [ empty_cell_coords[1] ] = new_num 
-            # if is_puzzle_valid(temp_puzzle):
+            if is_puzzle_valid(temp_puzzle):
+                # if the puzzle is valid, update the puzzle copy to reflect the new number, and break out of the loop to move to next empty cell
+                puzzle_copy = temp_puzzle.copy()
+                break # exit the for loop and to the next empty cell
+            else: # if the puzzle is not valid, try the next number in the list of acceptable numbers
+                continue
+        
         
         # if after going through all numbers for the cell, and still no valid numbers
         # the empty cell will remain empty
         # then, retrace to a prior attempted cell, skipping over the cells hard-written upon puzzle reception
+        if puzzle_copy[empty_cell_coords[0] ] [ empty_cell_coords[1] ] == EMPTY_CELL:
+            # retrace to a prior attempted cell, skipping over the cells hard-written upon puzzle reception
+            # this may require multiple retraces to find a cell with another valid number with change
+            while True:
+                # retrace to the prior attempted cell, skipping over the cells hard-written upon puzzle reception
+                empty_cell_coords = findTheNextEmptyCell(puzzle_copy)
+                if empty_cell_coords == (-1,-1):
+                    print("ERROR: no more empty cells to retrace to, but puzzle is still invalid")
+                    return False 
+                # if the cell is not an empty cell, and is not a hard-written cell, then it is an attempted cell that can be changed
+                if (puzzle_copy[empty_cell_coords[0] ] [ empty_cell_coords[1] ] != EMPTY_CELL) and ( unsolved_puzzle[empty_cell_coords[0] ] [ empty_cell_coords[1] ] == EMPTY_CELL):
+                    break
+                else: # if the cell is either an empty cell or a hard-written cell, continue retracing
+                    continue
+            
+            # after finding the prior attempted cell, try the next value in acceptable values list for that cell
+            temp_puzzle = puzzle_copy.copy() # create a puzzle copy for verifying new values
+            for new_num in ACCEPTABLE_CELL_VALUES:
+                # check if the puzzle is still valid after new number
+                temp_puzzle[empty_cell_coords[0] ] [ empty_cell_coords[1] ] = new_num 
+                if is_puzzle_valid(temp_puzzle):
+                    # if the puzzle is valid, update the puzzle copy to reflect the new number, and break out of the loop to move to next empty cell
+                    puzzle_copy = temp_puzzle.copy()
+                    break
+                else: # if the puzzle is not valid, try the next number in the list of acceptable numbers
+                    continue
 
+    return puzzle_copy
+
+def main_test():
+    unsolved_puzzle = read_puzzle_from_file()
+    print("solving puzzle function")
+    print("solved puzzle: \n", solvePuzzleV1(unsolved_puzzle))
+
+if __name__ == "__main__": # run the main test function only when this file is run directly, not when imported as a module
+    main_test()
